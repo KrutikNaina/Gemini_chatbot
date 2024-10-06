@@ -6,7 +6,7 @@ import Chatbot from './Chatbot';
 function App() {
   return (
     <div className="App">
-      <h1>Chatbot using Gemini API</h1>
+      <h1><center>Chatbot using Gemini API</center></h1>
       <Chatbot />
     </div>
   );

@@ -10,19 +10,24 @@ const Chatbot = () => {
   const sendMessageToAPI = async (message) => {
     try {
       const response = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + process.env.REACT_APP_GEMINI_API_KEY, // Replace with the correct Gemini API endpoint
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY}`, // API key in the query parameter
         {
-            "contents":[{"parts":[{"text":"Explain how AI works"}]}]
+          contents: [{ parts: [{ text: message }] }] // Pass the user's message here
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_GEMINI_API_KEY}`,
             "Content-Type": "application/json",
           },
         }
       );
-      
-      return response.data.reply; // Assuming the response contains a `reply` field with the bot's response
+
+      // Log the full response for debugging
+      console.log("API Response:", response);
+
+      // Safely extract the bot's reply using optional chaining and fallback
+      const botReply = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I didn't understand that.";
+
+      return botReply;
     } catch (error) {
       console.error("Error communicating with the Gemini API:", error);
       return "Sorry, I'm having trouble connecting to the server.";
@@ -55,7 +60,7 @@ const Chatbot = () => {
       </div>
       <div className="input-box">
         <input
-          type="contents"
+          type="text"
           value={userMessage}
           onChange={(e) => setUserMessage(e.target.value)}
           placeholder="Type a message..."
