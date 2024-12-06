@@ -54,3 +54,17 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.App {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 20px;
+}
+
+label {
+  margin: 10px;
+}
+
+img {
+  margin-top: 20px;
+}

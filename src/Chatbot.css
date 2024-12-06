@@ -1,0 +1,221 @@
+/* src/Chatbot.css */
+
+.chatbot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f9;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  .chat-window {
+    width: 100%;
+    max-height: 400px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+  }
+  
+  /* Bot Message Container */
+.bot-message-container {
+    display: flex;
+    align-items: flex-start;
+    margin: 10px 0;
+  }
+  
+  /* Bot Icon */
+  .bot-icon {
+    background-color: #0288d1; /* Bot-specific color */
+    color: white;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Bot Text */
+  .bot-message {
+    background-color: #e3f2fd; /* Light blue */
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    color: #333;
+    max-width: 75%;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* User Message Container */
+  .user-message-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0;
+  }
+  
+  /* User Message */
+  .user-message {
+    background-color: #d1c4e9; /* Light purple */
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    color: #333;
+    max-width: 75%;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  
+  .user-message {
+    background-color: #d1c4e9;
+    align-self: flex-end;
+  }
+  
+  .user-inputs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  
+  .send-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .send-button:hover {
+    background-color: #45a049;
+  }
+  
+  .user-message-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .user-message-box input {
+    flex-grow: 1;
+    padding: 12px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  .user-message-box button {
+    padding: 12px;
+    background-color: #008cba;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .user-message-box button:hover {
+    background-color: #007bb5;
+  }
+  
+  @media (max-width: 768px) {
+    .chatbot-container {
+      width: 90%;
+      padding: 15px;
+    }
+  
+    .input-field, .send-button {
+      padding: 10px;
+    }
+  
+    .user-message-box input {
+      padding: 10px;
+    }
+  }
+  
+
+  .bot-message, .user-message {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.3s ease forwards;
+  }
+  
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .typing-indicator span {
+    display: inline-block;
+    font-size: 20px;
+    line-height: 20px;
+    color: #0288d1;
+    animation: blink 1.5s infinite;
+  }
+  
+  .typing-indicator span:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+  
+  .typing-indicator span:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+  
+  @keyframes blink {
+    0%, 80% {
+      opacity: 0;
+    }
+    40% {
+      opacity: 1;
+    }
+  }
+
+  .destination-image-container {
+  margin: 15px 0;
+  text-align: center;
+}
+
+.destination-image {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}

@@ -1,18 +1,27 @@
 // src/Chatbot.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import './Chatbot.css'; // Import the CSS file for styling
 
 const Chatbot = () => {
-  const [messages, setMessages] = useState([{ contents: "Hello! How can I help you?", fromBot: true }]);
+  const [messages, setMessages] = useState([{ contents: "Hello! How can I help you today?", fromBot: true }]);
   const [userMessage, setUserMessage] = useState("");
+  const [destination, setDestination] = useState("");
+  const [day, setDay] = useState(""); // New state for day
+  const [budget, setBudget] = useState("");
+  const [activity, setActivity] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  
+
+
 
   // Function to send the message to the Gemini API
   const sendMessageToAPI = async (message) => {
     try {
       const response = await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY}`, // API key in the query parameter
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY}`,
         {
-          contents: [{ parts: [{ text: message }] }] // Pass the user's message here
+          contents: [{ parts: [{ text: message }] }]
         },
         {
           headers: {
@@ -21,10 +30,6 @@ const Chatbot = () => {
         }
       );
 
-      // Log the full response for debugging
-      console.log("API Response:", response);
-
-      // Safely extract the bot's reply using optional chaining and fallback
       const botReply = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I didn't understand that.";
 
       return botReply;
@@ -34,41 +39,118 @@ const Chatbot = () => {
     }
   };
 
+  // Function to handle sending a message
+
+  // Handle destination, budget, and activity inputs
+  const handleDestinationChange = (e) => setDestination(e.target.value);
+  const handleDayChange = (e) => setDay(e.target.value);
+  const handleBudgetChange = (e) => setBudget(e.target.value);
+  const handleActivityChange = (e) => setActivity(e.target.value);
+
+  // Adjust chat interaction flow based on the inputs
+  const handleChatFlow = async () => {
+    if (destination && budget && activity && day) {
+      const message = `I would like to go to ${destination} on ${day} with a budget of ${budget} to do some ${activity}. Can you help me plan?`;
+      setUserMessage(message);
+      await handleSendMessage();
+    } else {
+      setMessages([...messages, { contents: "Please provide details like destination, budget, activity, and day.", fromBot: true }]);
+    }
+  };
+
   const handleSendMessage = async () => {
     if (userMessage.trim()) {
-      // Add user's message to the chat
       const newMessages = [...messages, { contents: userMessage, fromBot: false }];
       setMessages(newMessages);
       setUserMessage("");
-
-      // Send the message to the API and get the response
+  
+      setIsTyping(true); // Show typing indicator
       const botReply = await sendMessageToAPI(userMessage);
-
-      // Add bot's reply to the chat
+      setIsTyping(false); // Hide typing indicator
+  
       setMessages([...newMessages, { contents: botReply, fromBot: true }]);
     }
   };
 
+  {isTyping && (
+    <div className="bot-message-container">
+      <div className="bot-icon">🤖</div>
+      <div className="bot-text typing-indicator">
+        <span>.</span><span>.</span><span>.</span>
+      </div>
+    </div>
+  )}
+    
+
+
   return (
-    <div className="chatbot">
+    <div className="chatbot-container">
       <div className="chat-window">
         {messages.map((msg, index) => (
-          <div key={index} className={msg.fromBot ? "bot-message" : "user-message"}>
-            {msg.contents}
+          <div key={index} className={msg.fromBot ? "bot-message-container" : "user-message-container"}>
+            {msg.fromBot ? (
+              <div className="bot-message">
+                <div className="bot-icon">🤖</div>
+                <div className="bot-text">{msg.contents}</div>
+              </div>
+            ) : (
+              <div className="user-message">
+                {msg.contents}
+              </div>
+            )}
           </div>
         ))}
       </div>
-      <div className="input-box">
-        <input
-          type="text"
-          value={userMessage}
-          onChange={(e) => setUserMessage(e.target.value)}
-          placeholder="Type a message..."
-        />
-        <button onClick={handleSendMessage}>Send</button>
-      </div>
-    </div>
+   
+   
+
+      {/* User inputs for destination, budget, and activity */ }
+  <div className="user-inputs">
+    <input
+      type="text"
+      value={destination}
+      onChange={handleDestinationChange}
+      placeholder="Destination"
+      className="input-field"
+    />
+    <input
+      type="text"
+      value={budget}
+      onChange={handleBudgetChange}
+      placeholder="Budget"
+      className="input-field"
+    />
+    <input
+      type="text"
+      value={activity}
+      onChange={handleActivityChange}
+      placeholder="Activity"
+      className="input-field"
+    />
+    <input
+      type="text"
+      value={day}
+      onChange={handleDayChange}
+      placeholder="Day"
+      className="input-field"
+    />
+    <button onClick={handleChatFlow} className="send-button">Send Details</button>
+  </div>
+
+  {/* General user message input */ }
+  <div className="user-message-box">
+    <input
+      type="text"
+      value={userMessage}
+      onChange={(e) => setUserMessage(e.target.value)}
+      placeholder="Type a message..."
+      className="input-field"
+    />
+    <button onClick={handleSendMessage} className="send-button">Send</button>
+  </div>
+    </div >
   );
 };
 
 export default Chatbot;
+
